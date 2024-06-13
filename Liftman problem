@@ -1,0 +1,22 @@
+def liftman_problem(n, m, requests):
+    current_floor = 1
+    total_distance = 0
+
+    for request in requests:
+        start, end = request
+        # Move to the floor where the request is made
+        total_distance += abs(current_floor - start)
+        # Move to the floor where the request wants to go
+        total_distance += abs(start - end)
+        # Update the current floor to the end floor of this request
+        current_floor = end
+
+    return total_distance
+
+
+n = 5
+m = 3
+requests = [(1, 3), (2, 5), (4, 2)]
+
+distance_traveled = liftman_problem(n, m, requests)
+print("Total distance traveled:", distance_traveled)
