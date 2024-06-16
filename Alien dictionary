@@ -1,0 +1,31 @@
+from collections import defaultdict, deque
+
+def alienOrder(words):
+    adj_list = defaultdict(set)
+    in_degree = {c: 0 for word in words for c in word}
+
+    for i in range(len(words) - 1):
+        first, second = words[i], words[i + 1]
+        min_length = min(len(first), len(second))
+        if len(first) > len(second) and first[:min_length] == second[:min_length]:
+            return ""
+        for j in range(min_length):
+            if first[j] != second[j]:
+                if second[j] not in adj_list[first[j]]:
+                    adj_list[first[j]].add(second[j])
+                    in_degree[second[j]] += 1
+                break
+
+    zero_in_degree = deque([c for c in in_degree if in_degree[c] == 0])
+    result = []
+    while zero_in_degree:
+        c = zero_in_degree.popleft()
+        result.append(c)
+        for neighbor in adj_list[c]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                zero_in_degree.append(neighbor)
+
+    if len(result) < len(in_degree):
+        return ""
+    return "".join(result)
