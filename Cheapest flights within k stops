@@ -1,0 +1,16 @@
+import heapq
+
+def findCheapestPrice(n, flights, src, dst, K):
+    graph = defaultdict(list)
+    for u, v, w in flights:
+        graph[u].append((v, w))
+
+    heap = [(0, src, K + 1)]
+    while heap:
+        price, node, stops = heapq.heappop(heap)
+        if node == dst:
+            return price
+        if stops > 0:
+            for neighbor, cost in graph[node]:
+                heapq.heappush(heap, (price + cost, neighbor, stops - 1))
+    return -1
