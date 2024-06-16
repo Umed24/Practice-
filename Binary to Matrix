@@ -1,0 +1,31 @@
+from collections import deque
+
+def minFlips(mat):
+    m, n = len(mat), len(mat[0])
+    start = sum(cell << (i * n + j) for i, row in enumerate(mat) for j, cell in enumerate(row))
+    
+    if start == 0:
+        return 0
+
+    def neighbors(state):
+        for i in range(m):
+            for j in range(n):
+                new_state = state
+                for ni, nj in [(i, j), (i-1, j), (i+1, j), (i, j-1), (i, j+1)]:
+                    if 0 <= ni < m and 0 <= nj < n:
+                        new_state ^= 1 << (ni * n + nj)
+                yield new_state
+    
+    queue = deque([(start, 0)])
+    visited = {start}
+    
+    while queue:
+        state, steps = queue.popleft()
+        for new_state in neighbors(state):
+            if new_state == 0:
+                return steps + 1
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append((new_state, steps + 1))
+    
+    return -1
