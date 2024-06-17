@@ -1,0 +1,17 @@
+def floyd_warshall(graph):
+    n = len(graph)
+    distance = [[float('inf')] * n for _ in range(n)]
+    
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                distance[i][j] = 0
+            elif graph[i][j] != 0:
+                distance[i][j] = graph[i][j]
+    
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                distance[i][j] = min(distance[i][j], distance[i][k] + distance[k][j])
+    
+    return distance
