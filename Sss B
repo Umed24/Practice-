@@ -1,0 +1,15 @@
+def bellman_ford(edges, n, start):
+    distances = [float('inf')] * n
+    distances[start] = 0
+    
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if distances[u] != float('inf') and distances[u] + w < distances[v]:
+                distances[v] = distances[u] + w
+    
+    # Check for negative weight cycles
+    for u, v, w in edges:
+        if distances[u] != float('inf') and distances[u] + w < distances[v]:
+            return None  # Negative weight cycle detected
+    
+    return distances
