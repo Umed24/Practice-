@@ -1,0 +1,31 @@
+from collections import defaultdict, deque
+
+def shortest_path_dag(n, edges, start):
+    graph = defaultdict(list)
+    in_degree = [0] * n
+    
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        in_degree[v] += 1
+    
+    topo_sort = []
+    queue = deque([i for i in range(n) if in_degree[i] == 0])
+    
+    while queue:
+        node = queue.popleft()
+        topo_sort.append(node)
+        for neighbor, _ in graph[node]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+    
+    distances = [float('inf')] * n
+    distances[start] = 0
+    
+    for node in topo_sort:
+        if distances[node] != float('inf'):
+            for neighbor, weight in graph[node]:
+                if distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    
+    return distances
