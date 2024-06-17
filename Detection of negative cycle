@@ -1,0 +1,14 @@
+def detect_negative_cycle(edges, n):
+    distances = [float('inf')] * n
+    distances[0] = 0  # Assume 0 as the starting point
+    
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if distances[u] != float('inf') and distances[u] + w < distances[v]:
+                distances[v] = distances[u] + w
+    
+    for u, v, w in edges:
+        if distances[u] != float('inf') and distances[u] + w < distances[v]:
+            return True  # Negative weight cycle detected
+    
+    return False
