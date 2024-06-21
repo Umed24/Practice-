@@ -1,0 +1,27 @@
+import json
+
+class Codec:
+
+    def serialize(self, root):
+        def rserialize(root):
+            if root is None:
+                vals.append(None)
+            else:
+                vals.append(root.val)
+                rserialize(root.left)
+                rserialize(root.right)
+        vals = []
+        rserialize(root)
+        return json.dumps(vals)
+
+    def deserialize(self, data):
+        def rdeserialize():
+            val = vals.pop(0)
+            if val is None:
+                return None
+            node = TreeNode(val)
+            node.left = rdeserialize()
+            node.right = rdeserialize()
+            return node
+        vals = json.loads(data)
+        return rdeserialize()
