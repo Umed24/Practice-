@@ -1,0 +1,4 @@
+def postorder_traversal(root):
+    if root is None:
+        return []
+    return postorder_traversal(root.left) + postorder_traversal(root.right) + [root.val]
